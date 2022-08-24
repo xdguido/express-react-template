@@ -21,12 +21,6 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    // email_validation_token: {
-    //   type: String,
-    // },
-    // password_recovery_token: {
-    //   type: String,
-    // },
   },
   {
     timestamps: true,
