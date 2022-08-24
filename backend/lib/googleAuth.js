@@ -44,7 +44,6 @@ async function getTokens(code) {
     });
     return res.data;
   } catch (error) {
-    console.error(`Failed to get token: "${error}"`);
     if (error.response) {
       console.error(error.response.data);
     }
@@ -63,10 +62,12 @@ async function fetchUser(id_token, access_token) {
         },
       }
     );
+
+    //dev log
     console.log(res.data);
+
     return res.data;
   } catch (error) {
-    console.error(`Failed to fetch user: "${error}"`);
     if (error.response) {
       console.error(error.response.data);
     }

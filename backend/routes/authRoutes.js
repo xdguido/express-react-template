@@ -1,21 +1,14 @@
 const router = require("express").Router();
-const googleAuth = require("../lib/googleAuth");
+const { registerUser, loginUser } = require("../controllers/authController");
+const { loginGoogle, urlGoogle } = require("../controllers/googleController");
+
+router.post("/", registerUser);
+router.post("/login", loginUser);
 
 // Getting login URL
-router.get("/google/url", (req, res) => {
-  return res.send(googleAuth.getGoogleAuthURL());
-});
+router.get("/google/url", urlGoogle);
 
 // Getting the user from Google with the code
-router.get("/google/callback", async (req, res, next) => {
-  const code = req.query.code;
-  try {
-    const { id_token, access_token } = await googleAuth.getTokens(code);
-    const user = await googleAuth.fetchUser(id_token, access_token);
-    res.redirect("http://localhost:3000");
-  } catch (err) {
-    next(err);
-  }
-});
+router.get("/google/callback", loginGoogle);
 
 module.exports = router;
