@@ -5,16 +5,16 @@ const {
   confirmEmail,
 } = require("../controllers/authController");
 const { loginGoogle, urlGoogle } = require("../controllers/googleController");
+const User = require("../models/User");
 
 router.post("/", registerUser);
 router.post("/login", loginUser);
 
 router.get("/confirmation/:token", confirmEmail);
+router.get("/recovery", sendRecovery);
+router.put("/reset-password", resetPassword);
 
-// Getting login URL
 router.get("/google/url", urlGoogle);
-
-// Getting the user from Google with the code
 router.get("/google/callback", loginGoogle);
 
 module.exports = router;
