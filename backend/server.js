@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 const app = express();
 
 const apiLimiter = rateLimit({
-  windowsMs: 1000,
+  windowsMs: 800,
   max: 1,
   handler: (request, response) => {
     response.status(401);

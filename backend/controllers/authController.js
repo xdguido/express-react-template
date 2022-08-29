@@ -65,7 +65,8 @@ const registerUser = asyncHandler(async (req, res) => {
       res.status(201).send("Confirm your email");
     } catch (err) {
       console.error(err);
-      throw new Error(err);
+      res.status(500);
+      throw new Error("Internal Server Error");
     }
   } else {
     res.status(400);
@@ -105,7 +106,7 @@ const sendRecovery = async (req, res) => {
     jwt.sign(
       { id: userExists._id },
       process.env.JWT_PASS_SECRET,
-      { expiresIn: "10m" },
+      { expiresIn: "15m" },
       (err, passToken) => {
         if (err) {
           console.error(err);
@@ -130,8 +131,7 @@ const sendRecovery = async (req, res) => {
 // @access Public
 
 const resetPassword = async (req, res) => {
-  const { password } = req.body;
-  const token = req.params.token;
+  const { password, token } = req.body;
 
   if (!password || !token) {
     return res.status(400).send("Password or token missing");
@@ -151,7 +151,8 @@ const resetPassword = async (req, res) => {
   if (user) {
     res.status(200).send("Password has been reset successfully");
   } else {
-    res.status(400).send("An error has ocurred");
+    res.status(404);
+    throw new Error("An error has occurred");
   }
 };
 

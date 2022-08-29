@@ -3,9 +3,10 @@ const {
   registerUser,
   loginUser,
   confirmEmail,
+  sendRecovery,
+  resetPassword,
 } = require("../controllers/authController");
 const { loginGoogle, urlGoogle } = require("../controllers/googleController");
-const User = require("../models/User");
 
 router.post("/", registerUser);
 router.post("/login", loginUser);
