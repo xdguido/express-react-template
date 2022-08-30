@@ -12,7 +12,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Generate JWT
 const generateJWT = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
@@ -34,11 +33,9 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new Error('Email already registered');
     }
 
-    // hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // create user
     const user = await User.create({
         email,
         name,
@@ -54,7 +51,6 @@ const registerUser = asyncHandler(async (req, res) => {
                 (err, emailToken) => {
                     if (err) {
                         console.error(err);
-                        throw new Error(err);
                     }
                     const url = `http://localhost:5000/api/auth/confirmation/${emailToken}`;
 
@@ -89,8 +85,7 @@ const confirmEmail = asyncHandler(async (req, res) => {
         res.status(201).send('Email confirmed');
     } catch (err) {
         res.status(400);
-        console.error(err);
-        throw new Error('Invalid email token');
+        throw new Error('Invalid token');
     }
 });
 
@@ -141,7 +136,6 @@ const resetPassword = asyncHandler(async (req, res) => {
         res.status(400).send('Password or token missing');
     }
 
-    // hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
