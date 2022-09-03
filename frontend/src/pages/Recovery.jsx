@@ -1,21 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { register, reset } from '../features/auth/authSlice';
+import { resetPassword, reset } from '../features/auth/authSlice';
 
-function RegisterForm() {
+function Recovery() {
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
         password: '',
         password2: ''
     });
-
-    const { name, email, password, password2 } = formData;
-
+    const { token } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { password, password2 } = formData;
     const { isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
     useEffect(() => {
@@ -42,37 +39,17 @@ function RegisterForm() {
             toast.error('Passwords do not match');
         } else {
             const userData = {
-                name,
-                email,
-                password
+                password,
+                token
             };
-            dispatch(register(userData));
+            dispatch(resetPassword(userData));
         }
     };
 
     return (
-        <div className="form">
+        <>
+            <h1>Reset password {token}</h1>
             <form onSubmit={onSubmit}>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={onChange}
-                        placeholder="Display name"
-                        required
-                    ></input>
-                </div>
-                <div className="form-group">
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={onChange}
-                        placeholder="Enter your email"
-                        required
-                    ></input>
-                </div>
                 <div className="form-group">
                     <input
                         type="password"
@@ -99,8 +76,8 @@ function RegisterForm() {
                     </button>
                 </div>
             </form>
-        </div>
+        </>
     );
 }
 
-export default RegisterForm;
+export default Recovery;

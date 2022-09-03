@@ -96,7 +96,8 @@ const sendRecovery = asyncHandler(async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-        res.status(400).send('Invalid email');
+        res.status(400);
+        throw new Error('Invalid email');
     }
 
     const userExists = await User.findOne({ email });
@@ -133,7 +134,8 @@ const resetPassword = asyncHandler(async (req, res) => {
     const { password, token } = req.body;
 
     if (!password || !token) {
-        res.status(400).send('Password or token missing');
+        res.status(400);
+        throw new Error('Password or token missing');
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -159,17 +161,23 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const user = await User.findOne({ email });
 
+    if (!user.verified_email) {
+        res.status(401);
+        throw new Error('Verify your email');
+    }
+
     if (user && (await bcrypt.compare(password, user.password))) {
-        res.json({
+        return res.json({
             _id: user.id,
             display_name: user.name,
             email: user.email,
+            verified_email: user.verified_email,
             token: generateJWT(user._id)
         });
-    } else {
-        res.status(400);
-        throw new Error('Invalid credentials');
     }
+
+    res.status(400);
+    throw new Error('Invalid credentials');
 });
 
 module.exports = {

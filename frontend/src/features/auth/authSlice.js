@@ -34,8 +34,20 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
     }
 });
 
+// logout user
 export const logout = createAsyncThunk('auth/logout', async () => {
     await authService.logout();
+});
+
+// reset password
+export const resetPassword = createAsyncThunk('auth/resetPassword', async (user, thunkAPI) => {
+    try {
+        return await authService.resetPassword(user);
+    } catch (err) {
+        const message =
+            (err.res && err.res.data && err.res.data.message) || err.message || err.toString();
+        return thunkAPI.rejectWithValue(message);
+    }
 });
 
 export const authSlice = createSlice({
@@ -54,10 +66,10 @@ export const authSlice = createSlice({
             .addCase(register.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(register.fulfilled, (state, action) => {
+            .addCase(register.fulfilled, (state) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.user = action.payload;
+                state.user = null;
             })
             .addCase(register.rejected, (state, action) => {
                 state.isLoading = false;
@@ -80,6 +92,20 @@ export const authSlice = createSlice({
                 state.user = null;
             })
             .addCase(logout.fulfilled, (state) => {
+                state.user = null;
+            })
+            .addCase(resetPassword.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(resetPassword.fulfilled, (state) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.user = null;
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
                 state.user = null;
             });
     }

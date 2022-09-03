@@ -13,8 +13,10 @@
     "rules": {
         "no-console": "warn",
         "no-unused-vars": "warn",
+        "no-undef": "warn",
         "no-underscore-dangle": "off",
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "react/jsx-no-undef": "warn"
     },
     "plugins": ["react", "prettier"]
 }

@@ -6,9 +6,9 @@ const API_URL = 'api/auth/';
 const register = async (userData) => {
     const res = await axios.post(API_URL, userData);
 
-    if (res.data) {
-        localStorage.setItem('user', JSON.stringify(res.data));
-    }
+    // if (res.data) {
+    //     localStorage.setItem('user', JSON.stringify(res.data));
+    // }
 
     return res.data;
 };
@@ -34,5 +34,11 @@ const logout = () => {
     localStorage.removeItem('user');
 };
 
-const authService = { register, login, logout, google };
+// reset password
+const resetPassword = async (userData) => {
+    const res = await axios.put(API_URL + 'reset-password', userData);
+    return res.data;
+};
+
+const authService = { register, login, logout, google, resetPassword };
 export default authService;
