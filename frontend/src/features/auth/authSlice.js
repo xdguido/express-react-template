@@ -50,6 +50,17 @@ export const resetPassword = createAsyncThunk('auth/resetPassword', async (user,
     }
 });
 
+// google login
+export const loginGoogle = createAsyncThunk('auth/loginGoogle', async (code, thunkAPI) => {
+    try {
+        return await authService.loginGoogle(code);
+    } catch (err) {
+        const message =
+            (err.res && err.res.data && err.res.data.message) || err.message || err.toString();
+        return thunkAPI.rejectWithValue(message);
+    }
+});
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -86,6 +97,20 @@ export const authSlice = createSlice({
                 state.user = action.payload;
             })
             .addCase(login.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+                state.user = null;
+            })
+            .addCase(loginGoogle.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(loginGoogle.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.user = action.payload;
+            })
+            .addCase(loginGoogle.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;

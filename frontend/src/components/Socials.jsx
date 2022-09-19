@@ -3,7 +3,7 @@ import { FaGoogle, FaFacebookSquare, FaGithubSquare } from 'react-icons/fa';
 function Socials() {
     const google = () => {
         window.open(
-            'https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fapi%2Fauth%2Fgoogle%2Fcallback&client_id=138008803906-1vn3ceqk6959ig38j3itcnu6ut50jk4r.apps.googleusercontent.com&access_type=offline&response_type=code&prompt=consent&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email',
+            'https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fgoogle&client_id=138008803906-1vn3ceqk6959ig38j3itcnu6ut50jk4r.apps.googleusercontent.com&access_type=offline&response_type=code&prompt=consent&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email',
             '_self'
         );
     };

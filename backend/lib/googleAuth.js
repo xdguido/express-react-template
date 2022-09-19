@@ -2,7 +2,7 @@ const axios = require('axios');
 
 const { GOOGLE_CLIENT_ID } = process.env;
 const { GOOGLE_CLIENT_SECRET } = process.env;
-const redirectURI = 'http://localhost:5000/api/auth/google/callback';
+const redirectURI = 'http://localhost:3000/google';
 
 function getGoogleAuthURL() {
     const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';

@@ -12,7 +12,7 @@ const urlGoogle = (req, res) => {
 };
 
 const loginGoogle = asyncHandler(async (req, res) => {
-    const { code } = req.query;
+    const { code } = req.body;
 
     // eslint-disable-next-line camelcase
     const { id_token, access_token } = await googleAuth.getTokens(code);
@@ -27,7 +27,8 @@ const loginGoogle = asyncHandler(async (req, res) => {
 
     if (userExists) {
         return res.status(201).json({
-            token: generateJWT(userExists._id)
+            token: generateJWT(userExists._id),
+            name: userExists.name
         });
     }
 
@@ -40,11 +41,12 @@ const loginGoogle = asyncHandler(async (req, res) => {
 
     if (user) {
         return res.status(201).json({
-            token: generateJWT(user._id)
+            token: generateJWT(user._id),
+            name: user.name
         });
     }
 
-    res.status(404);
+    res.status(500);
     throw new Error('Error creating user');
 });
 

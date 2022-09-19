@@ -25,8 +25,14 @@ const login = async (userData) => {
 };
 
 // google login
-const google = async () => {
-    return await axios.get(API_URL + 'google');
+const loginGoogle = async (code) => {
+    const res = await axios.post(API_URL + 'google/callback', { code });
+
+    if (res.data && res.status === 201) {
+        localStorage.setItem('user', JSON.stringify(res.data));
+    }
+
+    return res.data;
 };
 
 // logout user
@@ -40,5 +46,5 @@ const resetPassword = async (userData) => {
     return res.data;
 };
 
-const authService = { register, login, logout, google, resetPassword };
+const authService = { register, login, logout, loginGoogle, resetPassword };
 export default authService;

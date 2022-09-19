@@ -16,6 +16,6 @@ router.get('/recovery', sendRecovery);
 router.put('/reset-password', resetPassword);
 
 router.get('/google/url', urlGoogle);
-router.get('/google/callback', loginGoogle);
+router.post('/google/callback', loginGoogle);
 
 module.exports = router;

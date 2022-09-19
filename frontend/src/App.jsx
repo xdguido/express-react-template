@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Recovery from './pages/Recovery';
+import GoogleOauth from './pages/GoogleOauth';
+import NotFound from './pages/NotFound';
 
 function App() {
     return (
@@ -15,9 +17,9 @@ function App() {
                         <Route path="/" element={<Home />}></Route>
                         <Route path="/login" element={<Login />}></Route>
                         <Route path="/register" element={<Register />}></Route>
-                        <Route path="/google/:code" element={<GoogleOauth />}></Route>
+                        <Route path="/google/*" element={<GoogleOauth />}></Route>
                         <Route path="/recovery/:token" element={<Recovery />}></Route>
-                        <Route path="*" element={<Login />}></Route>
+                        <Route path="*" element={<NotFound />}></Route>
                     </Routes>
                 </div>
             </Router>
