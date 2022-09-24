@@ -17,7 +17,7 @@ function Socials() {
     };
 
     return (
-        <div className="socials">
+        <div className="container">
             <button className="google" onClick={google}>
                 <FaGoogle />
                 Log in with Google

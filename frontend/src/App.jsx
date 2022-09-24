@@ -7,21 +7,22 @@ import Register from './pages/Register';
 import Recovery from './pages/Recovery';
 import GoogleOauth from './pages/GoogleOauth';
 import NotFound from './pages/NotFound';
+import PageLayout from './pages/PageLayout';
 
 function App() {
     return (
         <>
             <Router>
-                <div className="container">
-                    <Routes>
-                        <Route path="/" element={<Home />}></Route>
-                        <Route path="/login" element={<Login />}></Route>
-                        <Route path="/register" element={<Register />}></Route>
-                        <Route path="/google/*" element={<GoogleOauth />}></Route>
-                        <Route path="/recovery/:token" element={<Recovery />}></Route>
-                        <Route path="*" element={<NotFound />}></Route>
-                    </Routes>
-                </div>
+                <Routes>
+                    <Route path="/" element={<PageLayout />}>
+                        <Route index element={<Home />} />
+                        <Route path="login" element={<Login />} />
+                        <Route path="register" element={<Register />} />
+                        <Route path="recovery/:token" element={<Recovery />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Route>
+                    <Route path="/google/*" element={<GoogleOauth />} />
+                </Routes>
             </Router>
             <ToastContainer />
         </>

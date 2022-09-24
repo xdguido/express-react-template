@@ -15,8 +15,8 @@ function Header() {
     };
 
     return (
-        <header className="header">
-            <div className="logo">
+        <header className="">
+            <div className="">
                 <Link to="/">express-auth</Link>
             </div>
             <ul>
