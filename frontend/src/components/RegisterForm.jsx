@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { register, reset } from '../features/auth/authSlice';
+import SubmitButton from './SubmitButton';
 
 function RegisterForm() {
     const [formData, setFormData] = useState({
@@ -51,55 +52,68 @@ function RegisterForm() {
     };
 
     return (
-        <div className="form">
-            <form onSubmit={onSubmit}>
-                <div className="form-group">
-                    <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={onChange}
-                        placeholder="Display name"
-                        required
-                    ></input>
-                </div>
-                <div className="form-group">
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={onChange}
-                        placeholder="Enter your email"
-                        required
-                    ></input>
-                </div>
-                <div className="form-group">
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={onChange}
-                        placeholder="Enter password"
-                        required
-                    ></input>
-                </div>
-                <div className="form-group">
-                    <input
-                        type="password"
-                        id="password2"
-                        value={password2}
-                        onChange={onChange}
-                        placeholder="Confirm password"
-                        required
-                    ></input>
-                </div>
-                <div className="form-group">
-                    <button type="submit" className="btn btn-block">
-                        Submit
-                    </button>
-                </div>
-            </form>
-        </div>
+        <form
+            className="flex flex-col rounded-md shadow-md text-gray-900 bg-white p-4"
+            onSubmit={onSubmit}
+        >
+            <div className="mb-2">
+                <label className="" htmlFor="name">
+                    Display name
+                </label>
+                <input
+                    className="rounded-sm border-gray-300 h-9 w-full"
+                    type="text"
+                    id="name"
+                    value={name}
+                    onChange={onChange}
+                    placeholder=""
+                    required
+                ></input>
+            </div>
+            <div className="mb-2">
+                <label className="" htmlFor="email">
+                    Email
+                </label>
+                <input
+                    className="rounded-sm border-gray-300 h-9 w-full"
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={onChange}
+                    placeholder=""
+                    required
+                ></input>
+            </div>
+            <div className="mb-2">
+                <label className="" htmlFor="password">
+                    Password
+                </label>
+                <input
+                    className="rounded-sm border-gray-300 h-9 w-full"
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={onChange}
+                    placeholder=""
+                    required
+                ></input>
+            </div>
+            <div className="mb-2">
+                <label className="" htmlFor="password2">
+                    Confirm password
+                </label>
+                <input
+                    className="rounded-sm border-gray-300 h-9 w-full"
+                    type="password"
+                    id="password2"
+                    value={password2}
+                    onChange={onChange}
+                    placeholder=""
+                    required
+                ></input>
+            </div>
+            <SubmitButton isLoading={isLoading} label="Sign up" />
+        </form>
     );
 }
 

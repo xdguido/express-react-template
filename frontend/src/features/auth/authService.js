@@ -6,10 +6,6 @@ const API_URL = 'api/auth/';
 const register = async (userData) => {
     const res = await axios.post(API_URL, userData);
 
-    // if (res.data) {
-    //     localStorage.setItem('user', JSON.stringify(res.data));
-    // }
-
     return res.data;
 };
 
@@ -17,7 +13,7 @@ const register = async (userData) => {
 const login = async (userData) => {
     const res = await axios.post(API_URL + 'login', userData);
 
-    if (res.data) {
+    if (res.data && res.status === 201) {
         localStorage.setItem('user', JSON.stringify(res.data));
     }
 

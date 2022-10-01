@@ -17,8 +17,7 @@ export const register = createAsyncThunk('auth/register', async (user, thunkAPI)
     try {
         return await authService.register(user);
     } catch (err) {
-        const message =
-            (err.res && err.res.data && err.res.data.message) || err.message || err.toString();
+        const message = err.response.data.error || err.message;
         return thunkAPI.rejectWithValue(message);
     }
 });
@@ -28,8 +27,7 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
     try {
         return await authService.login(user);
     } catch (err) {
-        const message =
-            (err.res && err.res.data && err.res.data.message) || err.message || err.toString();
+        const message = err.response.data.error || err.message;
         return thunkAPI.rejectWithValue(message);
     }
 });
@@ -44,8 +42,7 @@ export const resetPassword = createAsyncThunk('auth/resetPassword', async (user,
     try {
         return await authService.resetPassword(user);
     } catch (err) {
-        const message =
-            (err.res && err.res.data && err.res.data.message) || err.message || err.toString();
+        const message = err.response.data.error || err.message;
         return thunkAPI.rejectWithValue(message);
     }
 });
@@ -55,8 +52,7 @@ export const loginGoogle = createAsyncThunk('auth/loginGoogle', async (code, thu
     try {
         return await authService.loginGoogle(code);
     } catch (err) {
-        const message =
-            (err.res && err.res.data && err.res.data.message) || err.message || err.toString();
+        const message = err.response.data.error || err.message;
         return thunkAPI.rejectWithValue(message);
     }
 });
