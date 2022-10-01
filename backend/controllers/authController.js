@@ -161,7 +161,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    if (!user.verified_email) {
+    if (user && !user.verified_email) {
         res.status(401);
         throw new Error('Verify your email');
     }

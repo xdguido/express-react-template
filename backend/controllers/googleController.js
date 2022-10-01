@@ -28,7 +28,8 @@ const loginGoogle = asyncHandler(async (req, res) => {
     if (userExists) {
         return res.status(201).json({
             token: generateJWT(userExists._id),
-            name: userExists.name
+            name: userExists.name,
+            image_url: userExists.image_url
         });
     }
 
@@ -42,7 +43,8 @@ const loginGoogle = asyncHandler(async (req, res) => {
     if (user) {
         return res.status(201).json({
             token: generateJWT(user._id),
-            name: user.name
+            name: user.name,
+            image_url: user.image_url
         });
     }
 
