@@ -13,7 +13,10 @@ function OpenIdButtons() {
     };
 
     const facebook = () => {
-        window.open('http://localhost:5000/api/auth/facebook', '_self');
+        window.open(
+            'https://www.facebook.com/v15.0/dialog/oauth?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Ffacebook&client_id=3363396343883714&access_type=offline&response_type=code&prompt=consent&scope=public_profile+email',
+            '_self'
+        );
     };
 
     return (

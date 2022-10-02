@@ -5,7 +5,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Recovery from './pages/Recovery';
-import GoogleOauth from './pages/GoogleOauth';
+import GoogleOAuth from './pages/GoogleOAuth';
+import FacebookOAuth from './pages/FacebookOAuth';
 import NotFound from './pages/NotFound';
 import PageLayout from './pages/PageLayout';
 
@@ -19,7 +20,8 @@ function App() {
                         <Route path="login" element={<Login />} />
                         <Route path="register" element={<Register />} />
                         <Route path="recovery/:token" element={<Recovery />} />
-                        <Route path="/google/*" element={<GoogleOauth />} />
+                        <Route path="/google/*" element={<GoogleOAuth />} />
+                        <Route path="/facebook/*" element={<FacebookOAuth />} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>

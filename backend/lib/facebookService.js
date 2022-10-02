@@ -1,21 +1,18 @@
 const axios = require('axios');
 
-const { GOOGLE_CLIENT_ID } = process.env;
-const { GOOGLE_CLIENT_SECRET } = process.env;
-const redirectURI = 'http://localhost:3000/google';
+const { FACEBOOK_CLIENT_ID } = process.env;
+const { FACEBOOK_CLIENT_SECRET } = process.env;
+const redirectURI = 'http://localhost:3000/facebook';
 
-function getGoogleAuthURL() {
-    const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+function getFacebookAuthURL() {
+    const rootUrl = 'https://www.facebook.com/v15.0/dialog/oauth';
     const options = {
         redirect_uri: redirectURI,
-        client_id: GOOGLE_CLIENT_ID,
+        client_id: FACEBOOK_CLIENT_ID,
         access_type: 'offline',
         response_type: 'code',
         prompt: 'consent',
-        scope: [
-            'https://www.googleapis.com/auth/userinfo.profile',
-            'https://www.googleapis.com/auth/userinfo.email'
-        ].join(' ')
+        scope: ['public_profile', 'email'].join(' ')
     };
     const usp = new URLSearchParams(options);
 
@@ -24,13 +21,12 @@ function getGoogleAuthURL() {
 
 async function getTokens(code) {
     // Uses the code to get tokens that can be used to fetch the user's profile
-    const url = 'https://oauth2.googleapis.com/token';
+    const url = 'https://graph.facebook.com/v15.0/oauth/access_token';
     const values = {
         code,
-        client_id: GOOGLE_CLIENT_ID,
-        client_secret: GOOGLE_CLIENT_SECRET,
-        redirect_uri: redirectURI,
-        grant_type: 'authorization_code'
+        client_id: FACEBOOK_CLIENT_ID,
+        client_secret: FACEBOOK_CLIENT_SECRET,
+        redirect_uri: redirectURI
     };
 
     const usp = new URLSearchParams(values);
@@ -50,16 +46,11 @@ async function getTokens(code) {
     }
 }
 
-async function fetchUser(idToken, accessToken) {
+async function fetchUser(accessToken) {
     // Fetch the user's profile with the access token and bearer
     try {
         const res = await axios.get(
-            `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${accessToken}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${idToken}`
-                }
-            }
+            `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email,picture`
         );
 
         // dev log
@@ -74,5 +65,5 @@ async function fetchUser(idToken, accessToken) {
     }
 }
 
-const googleAuth = { getGoogleAuthURL, getTokens, fetchUser };
-module.exports = googleAuth;
+const facebookService = { getFacebookAuthURL, getTokens, fetchUser };
+module.exports = facebookService;

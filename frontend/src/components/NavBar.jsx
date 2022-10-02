@@ -110,8 +110,9 @@ function NavBar() {
                                                     src={
                                                         user.image_url
                                                             ? user.image_url
-                                                            : 'https://www.dropbox.com/s/u4xzf6pae5yde0p/337e74ba34080415e432f9e0adc2170e.png?dl=1'
+                                                            : 'https://www.dropbox.com/s/3mo5jg5bdfvu7ta/337e74ba34080415e432f9e0adc2170e.webp?dl=1'
                                                     }
+                                                    referrerPolicy="no-referrer"
                                                     alt={user.name}
                                                 />
                                             </Menu.Button>

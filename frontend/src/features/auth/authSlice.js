@@ -57,6 +57,16 @@ export const loginGoogle = createAsyncThunk('auth/loginGoogle', async (code, thu
     }
 });
 
+// facebook login
+export const loginFacebook = createAsyncThunk('auth/loginFacebook', async (code, thunkAPI) => {
+    try {
+        return await authService.loginFacebook(code);
+    } catch (err) {
+        const message = err.response.data.error || err.message;
+        return thunkAPI.rejectWithValue(message);
+    }
+});
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -107,6 +117,20 @@ export const authSlice = createSlice({
                 state.user = action.payload;
             })
             .addCase(loginGoogle.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+                state.user = null;
+            })
+            .addCase(loginFacebook.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(loginFacebook.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.user = action.payload;
+            })
+            .addCase(loginFacebook.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;

@@ -1,27 +1,27 @@
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
-const googleService = require('../lib/googleService');
+const facebookService = require('../lib/facebookService');
 const User = require('../models/User');
 
 const generateJWT = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
 
-const urlGoogle = (req, res) => {
-    res.send(googleService.getGoogleAuthURL());
+const urlFacebook = (req, res) => {
+    res.send(facebookService.getFacebookAuthURL());
 };
 
-const loginGoogle = asyncHandler(async (req, res) => {
+const loginFacebook = asyncHandler(async (req, res) => {
     const { code } = req.body;
 
     // eslint-disable-next-line camelcase
-    const { id_token, access_token } = await googleService.getTokens(code);
-    const data = await googleService.fetchUser(id_token, access_token);
+    const { access_token } = await facebookService.getTokens(code);
+    const data = await facebookService.fetchUser(access_token);
 
-    if (data && !data.verified_email) {
-        res.status(401);
-        throw new Error('User not verified');
-    }
+    // if (data && !data.verified) {
+    //     res.status(401);
+    //     throw new Error('User not verified');
+    // }
 
     const userExists = await User.findOne({ email: data.email });
 
@@ -36,8 +36,8 @@ const loginGoogle = asyncHandler(async (req, res) => {
     const user = await User.create({
         email: data.email,
         name: data.name,
-        image_url: data.picture,
-        verified_email: data.verified_email
+        image_url: data.picture.data.url,
+        verified_email: true
     });
 
     if (user) {
@@ -52,4 +52,4 @@ const loginGoogle = asyncHandler(async (req, res) => {
     throw new Error('Error creating user');
 });
 
-module.exports = { loginGoogle, urlGoogle };
+module.exports = { loginFacebook, urlFacebook };
