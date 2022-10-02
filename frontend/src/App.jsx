@@ -19,9 +19,9 @@ function App() {
                         <Route path="login" element={<Login />} />
                         <Route path="register" element={<Register />} />
                         <Route path="recovery/:token" element={<Recovery />} />
+                        <Route path="/google/*" element={<GoogleOauth />} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
-                    <Route path="/google/*" element={<GoogleOauth />} />
                 </Routes>
             </Router>
             <ToastContainer />
