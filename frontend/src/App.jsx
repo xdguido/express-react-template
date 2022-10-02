@@ -9,6 +9,7 @@ import GoogleOAuth from './pages/GoogleOAuth';
 import FacebookOAuth from './pages/FacebookOAuth';
 import NotFound from './pages/NotFound';
 import PageLayout from './pages/PageLayout';
+import GithubOAuth from './pages/GithubOAuth';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                         <Route path="recovery/:token" element={<Recovery />} />
                         <Route path="/google/*" element={<GoogleOAuth />} />
                         <Route path="/facebook/*" element={<FacebookOAuth />} />
+                        <Route path="/github/*" element={<GithubOAuth />} />
                         <Route path="*" element={<NotFound />} />
                     </Route>
                 </Routes>

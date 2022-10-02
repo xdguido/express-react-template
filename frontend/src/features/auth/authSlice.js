@@ -67,6 +67,16 @@ export const loginFacebook = createAsyncThunk('auth/loginFacebook', async (code,
     }
 });
 
+// github login
+export const loginGithub = createAsyncThunk('auth/loginGithub', async (code, thunkAPI) => {
+    try {
+        return await authService.loginGithub(code);
+    } catch (err) {
+        const message = err.response.data.error || err.message;
+        return thunkAPI.rejectWithValue(message);
+    }
+});
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -131,6 +141,20 @@ export const authSlice = createSlice({
                 state.user = action.payload;
             })
             .addCase(loginFacebook.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+                state.user = null;
+            })
+            .addCase(loginGithub.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(loginGithub.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.user = action.payload;
+            })
+            .addCase(loginGithub.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;

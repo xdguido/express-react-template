@@ -9,7 +9,10 @@ function OpenIdButtons() {
     };
 
     const github = () => {
-        window.open('http://localhost:5000/api/auth/github', '_self');
+        window.open(
+            'https://github.com/login/oauth/authorize?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fgithub&client_id=f5bb9a454b9e4a16ec91&scope=user',
+            '_self'
+        );
     };
 
     const facebook = () => {

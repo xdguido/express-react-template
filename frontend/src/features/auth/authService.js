@@ -42,6 +42,17 @@ const loginFacebook = async (code) => {
     return res.data;
 };
 
+// github login
+const loginGithub = async (code) => {
+    const res = await axios.post(API_URL + 'github/callback', { code });
+
+    if (res.data && res.status === 201) {
+        localStorage.setItem('user', JSON.stringify(res.data));
+    }
+
+    return res.data;
+};
+
 // logout user
 const logout = () => {
     localStorage.removeItem('user');
@@ -53,5 +64,13 @@ const resetPassword = async (userData) => {
     return res.data;
 };
 
-const authService = { register, login, logout, loginGoogle, loginFacebook, resetPassword };
+const authService = {
+    register,
+    login,
+    logout,
+    loginGoogle,
+    loginFacebook,
+    loginGithub,
+    resetPassword
+};
 export default authService;
