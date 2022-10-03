@@ -21,7 +21,7 @@ function Recovery() {
             toast.error(message);
         }
         if (isSuccess) {
-            navigate('/login');
+            navigate('/login', { replace: true });
         }
         dispatch(reset());
     }, [isError, isSuccess, message, navigate, dispatch]);
