@@ -53,11 +53,11 @@ function RegisterForm() {
 
     return (
         <form
-            className="flex flex-col rounded-md shadow-md text-gray-900 bg-white p-4"
+            className="flex flex-col rounded-md shadow-md text-gray-900 bg-white p-5"
             onSubmit={onSubmit}
         >
-            <div className="mb-2">
-                <label className="" htmlFor="name">
+            <div className="flex flex-col mb-3">
+                <label className="mb-1" htmlFor="name">
                     Display name
                 </label>
                 <input
@@ -70,8 +70,8 @@ function RegisterForm() {
                     required
                 ></input>
             </div>
-            <div className="mb-2">
-                <label className="" htmlFor="email">
+            <div className="flex flex-col mb-3">
+                <label className="mb-1" htmlFor="email">
                     Email
                 </label>
                 <input
@@ -84,8 +84,8 @@ function RegisterForm() {
                     required
                 ></input>
             </div>
-            <div className="mb-2">
-                <label className="" htmlFor="password">
+            <div className="flex flex-col mb-3">
+                <label className="mb-1" htmlFor="password">
                     Password
                 </label>
                 <input
@@ -98,8 +98,8 @@ function RegisterForm() {
                     required
                 ></input>
             </div>
-            <div className="mb-2">
-                <label className="" htmlFor="password2">
+            <div className="flex flex-col mb-3">
+                <label className="mb-1" htmlFor="password2">
                     Confirm password
                 </label>
                 <input

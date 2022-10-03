@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { login, reset } from '../features/auth/authSlice';
 import SubmitButton from './SubmitButton';
@@ -46,11 +46,11 @@ function LoginForm() {
 
     return (
         <form
-            className="flex flex-col rounded-md shadow-md text-gray-900 bg-white p-4"
+            className="flex flex-col rounded-md shadow-md text-gray-900 bg-white p-5"
             onSubmit={onSubmit}
         >
-            <div className="mb-3">
-                <label className="" htmlFor="email">
+            <div className="flex flex-col mb-3">
+                <label className="mb-1" htmlFor="email">
                     Email
                 </label>
                 <input
@@ -64,10 +64,15 @@ function LoginForm() {
                     required
                 ></input>
             </div>
-            <div className="mb-3">
-                <label className="" htmlFor="password">
-                    Password
-                </label>
+            <div className="flex flex-col mb-3">
+                <div className="flex items-center justify-between">
+                    <label className="mb-1" htmlFor="password">
+                        Password
+                    </label>
+                    <Link className="text-xs text-blue-600" to="/">
+                        Forgot your password?
+                    </Link>
+                </div>
                 <input
                     className="rounded-sm border-gray-300 h-9 w-full"
                     disabled={isLoading}
@@ -79,7 +84,7 @@ function LoginForm() {
                     required
                 ></input>
             </div>
-            <SubmitButton isLoading={isLoading} label="Sign in" />
+            <SubmitButton isLoading={isLoading} label="Log in" />
         </form>
     );
 }

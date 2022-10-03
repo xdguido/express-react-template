@@ -25,21 +25,21 @@ function OpenIdButtons() {
     return (
         <div className="flex flex-col items-center w-full py-4">
             <button
-                className="flex items-center justify-center rounded-sm bg-white text-gray-900 text-sm w-full mb-3 py-2"
+                className="flex items-center justify-center rounded border bg-white text-gray-900 text-sm w-full mb-3 py-2"
                 onClick={google}
             >
                 <FaGoogle className="mr-1.5" />
                 Log in with Google
             </button>
             <button
-                className="flex items-center justify-center rounded-sm bg-gray-900 text-white text-sm w-full mb-3 py-2"
+                className="flex items-center justify-center rounded bg-gray-900 text-white text-sm w-full mb-3 py-2"
                 onClick={github}
             >
                 <FaGithub className="mr-1.5" />
                 Log in with Github
             </button>
             <button
-                className="flex items-center justify-center rounded-sm bg-blue-800 text-white text-sm w-full mb-3 py-2"
+                className="flex items-center justify-center rounded bg-blue-800 text-white text-sm w-full mb-3 py-2"
                 onClick={facebook}
             >
                 <FaFacebook className="mr-1.5" />

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { loginFacebook, reset } from '../features/auth/authSlice';
 import { FaFacebook } from 'react-icons/fa';
+import Logo from '../components/Logo';
 
 function FacebookOAuth() {
     const [searchParams] = useSearchParams();
@@ -37,16 +38,7 @@ function FacebookOAuth() {
                     <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
                 </div>
 
-                <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                />
-                <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
-                />
+                <Logo />
             </div>
         </div>
     );
