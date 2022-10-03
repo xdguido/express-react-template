@@ -16,6 +16,51 @@ const generateJWT = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
 
+// @desc Login user
+// @route POST /auth/login
+// @access Public
+const loginUser = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (user && !user.verified_email) {
+        jwt.sign(
+            { id: user._id },
+            process.env.JWT_EMAIL_SECRET,
+            { expiresIn: '1d' },
+            (err, emailToken) => {
+                if (err) {
+                    console.error(err);
+                }
+                const url = `http://localhost:5000/api/auth/confirmation/${emailToken}`;
+
+                transporter.sendMail({
+                    from: 'login@asd.com',
+                    to: user.email,
+                    subject: 'Confirm your email',
+                    html: `Please click this link to confirm your email: <a href="${url}">Confirm Email</a>`
+                });
+            }
+        );
+        res.status(401);
+        throw new Error('Check your mail and verify account');
+    }
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+        return res.json({
+            _id: user.id,
+            display_name: user.name,
+            email: user.email,
+            verified_email: user.verified_email,
+            token: generateJWT(user._id)
+        });
+    }
+
+    res.status(400);
+    throw new Error('Invalid credentials');
+});
+
 // @desc Register user
 // @route POST /auth
 // @access Public
@@ -151,33 +196,6 @@ const resetPassword = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('An error has occurred');
     }
-});
-
-// @desc Login user
-// @route POST /auth/login
-// @access Public
-const loginUser = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-
-    if (user && !user.verified_email) {
-        res.status(401);
-        throw new Error('Verify your email');
-    }
-
-    if (user && (await bcrypt.compare(password, user.password))) {
-        return res.json({
-            _id: user.id,
-            display_name: user.name,
-            email: user.email,
-            verified_email: user.verified_email,
-            token: generateJWT(user._id)
-        });
-    }
-
-    res.status(400);
-    throw new Error('Invalid credentials');
 });
 
 module.exports = {
