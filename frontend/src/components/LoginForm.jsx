@@ -21,7 +21,7 @@ function LoginForm() {
         if (isError) {
             toast.error(message);
         }
-        if (isSuccess) {
+        if (user || isSuccess) {
             navigate('/');
         }
         dispatch(reset());
