@@ -22,7 +22,7 @@ function FacebookOAuth() {
             navigate('/error');
         }
         if (isSuccess) {
-            navigate('/');
+            navigate('/', { replace: true });
         }
         dispatch(reset());
     }, [isError, isSuccess]);
