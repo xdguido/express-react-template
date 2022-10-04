@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 // eslint-disable-next-line no-unused-vars
 const dotenv = require('dotenv').config();
 // eslint-disable-next-line no-unused-vars
@@ -24,6 +25,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/auth', apiLimiter, require('./routes/authRoutes'));
+
+// serve frontend
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../frontend/build')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../', 'frontend', 'build', 'index.html'));
+    });
+} else {
+    app.get('/', (req, res) => {
+        res.send('Please set to production environment');
+    });
+}
 
 app.use(errorHandler);
 
