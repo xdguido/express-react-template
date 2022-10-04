@@ -5,7 +5,7 @@ import { loginGoogle, reset } from '../features/auth/authSlice';
 import { FaGoogle } from 'react-icons/fa';
 import Logo from '../components/Logo';
 
-function GoogleOauth() {
+function GoogleOAuth() {
     const [searchParams] = useSearchParams();
     const code = searchParams.get('code');
 
@@ -44,4 +44,4 @@ function GoogleOauth() {
     );
 }
 
-export default GoogleOauth;
+export default GoogleOAuth;
