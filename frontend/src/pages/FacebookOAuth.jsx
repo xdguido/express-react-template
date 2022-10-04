@@ -19,7 +19,7 @@ function FacebookOAuth() {
 
     useEffect(() => {
         if (isError) {
-            navigate('/error');
+            navigate('/error', { replace: true });
         }
         if (isSuccess) {
             navigate('/', { replace: true });
