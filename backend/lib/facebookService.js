@@ -53,9 +53,6 @@ async function fetchUser(accessToken) {
             `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email,picture`
         );
 
-        // dev log
-        console.log(res.data);
-
         return res.data;
     } catch (error) {
         if (error.response) {

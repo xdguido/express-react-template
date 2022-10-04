@@ -62,9 +62,6 @@ async function fetchUser(idToken, accessToken) {
             }
         );
 
-        // dev log
-        console.log(res.data);
-
         return res.data;
     } catch (error) {
         if (error.response) {

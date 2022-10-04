@@ -54,14 +54,11 @@ async function fetchUser(accessToken) {
         });
         const res1 = await axios.get('https://api.github.com/user/emails', {
             headers: {
-                Authorization: `token ${accessToken}`
+                Authorization: `Bearer ${accessToken}`
             }
         });
 
         const res2 = { ...res.data, ...res1.data[0] };
-
-        // dev log
-        console.log(res2);
 
         return res2;
     } catch (error) {
