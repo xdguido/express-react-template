@@ -1,8 +1,7 @@
 const axios = require('axios');
 
-const { GOOGLE_CLIENT_ID } = process.env;
-const { GOOGLE_CLIENT_SECRET } = process.env;
-const redirectURI = 'http://localhost:3000/google';
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NODE_ENV, HOST } = process.env;
+const redirectURI = NODE_ENV === 'production' ? `${HOST}/google` : 'http://localhost:3000/google';
 
 function getGoogleAuthURL() {
     const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
@@ -11,7 +10,7 @@ function getGoogleAuthURL() {
         client_id: GOOGLE_CLIENT_ID,
         access_type: 'offline',
         response_type: 'code',
-        prompt: 'none',
+        prompt: 'consent',
         scope: [
             'https://www.googleapis.com/auth/userinfo.profile',
             'https://www.googleapis.com/auth/userinfo.email'

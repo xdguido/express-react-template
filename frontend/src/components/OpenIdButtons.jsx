@@ -1,25 +1,55 @@
 import { FaGoogle, FaFacebook, FaGithub } from 'react-icons/fa';
 
+const { VITE_GOOGLE_CLIENT_ID, VITE_GITHUB_CLIENT_ID, VITE_FACEBOOK_CLIENT_ID, MODE, HOST } =
+    import.meta.env;
+const redirectURI = (service) => {
+    return MODE === 'production' ? `${HOST}/${service}` : `http://localhost:3000/${service}`;
+};
+
 function OpenIdButtons() {
     const google = () => {
-        window.open(
-            'https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fgoogle&client_id=138008803906-1vn3ceqk6959ig38j3itcnu6ut50jk4r.apps.googleusercontent.com&access_type=offline&response_type=code&prompt=consent&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email',
-            '_self'
-        );
+        const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
+        const options = {
+            redirect_uri: redirectURI('google'),
+            client_id: VITE_GOOGLE_CLIENT_ID,
+            access_type: 'offline',
+            response_type: 'code',
+            prompt: 'consent',
+            scope: [
+                'https://www.googleapis.com/auth/userinfo.profile',
+                'https://www.googleapis.com/auth/userinfo.email'
+            ].join(' ')
+        };
+        const usp = new URLSearchParams(options);
+
+        window.location.href = `${rootUrl}?${usp.toString()}`;
     };
 
     const github = () => {
-        window.open(
-            'https://github.com/login/oauth/authorize?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fgithub&client_id=f5bb9a454b9e4a16ec91&scope=user',
-            '_self'
-        );
+        const rootUrl = 'https://github.com/login/oauth/authorize';
+        const options = {
+            redirect_uri: redirectURI('github'),
+            client_id: VITE_GITHUB_CLIENT_ID,
+            scope: 'user'
+        };
+        const usp = new URLSearchParams(options);
+
+        window.location.href = `${rootUrl}?${usp.toString()}`;
     };
 
     const facebook = () => {
-        window.open(
-            'https://www.facebook.com/v15.0/dialog/oauth?redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Ffacebook&client_id=3363396343883714&access_type=offline&response_type=code&prompt=consent&scope=public_profile+email',
-            '_self'
-        );
+        const rootUrl = 'https://www.facebook.com/v15.0/dialog/oauth';
+        const options = {
+            redirect_uri: redirectURI('facebook'),
+            client_id: VITE_FACEBOOK_CLIENT_ID,
+            access_type: 'offline',
+            response_type: 'code',
+            prompt: 'consent',
+            scope: ['public_profile', 'email'].join(' ')
+        };
+        const usp = new URLSearchParams(options);
+
+        window.location.href = `${rootUrl}?${usp.toString()}`;
     };
 
     return (
