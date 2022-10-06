@@ -12,6 +12,9 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+const { NODE_ENV, HOST } = process.env;
+const BASE_URL = NODE_ENV === 'production' ? `${HOST}` : 'http://localhost:5000';
+
 const generateJWT = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
@@ -33,7 +36,7 @@ const loginUser = asyncHandler(async (req, res) => {
                 if (err) {
                     console.error(err);
                 }
-                const url = `http://localhost:5000/api/auth/confirmation/${emailToken}`;
+                const url = `${BASE_URL}/api/auth/confirmation/${emailToken}`;
 
                 transporter.sendMail({
                     from: 'login@asd.com',
@@ -97,7 +100,7 @@ const registerUser = asyncHandler(async (req, res) => {
                     if (err) {
                         console.error(err);
                     }
-                    const url = `http://localhost:5000/api/auth/confirmation/${emailToken}`;
+                    const url = `${BASE_URL}/api/auth/confirmation/${emailToken}`;
 
                     transporter.sendMail({
                         from: 'login@asd.com',
@@ -156,7 +159,7 @@ const sendRecovery = asyncHandler(async (req, res) => {
                 if (err) {
                     console.error(err);
                 }
-                const url = `http://localhost:3000/recovery/${passToken}`;
+                const url = `${BASE_URL}/recovery/${passToken}`;
 
                 transporter.sendMail({
                     from: 'login@asd.com',
