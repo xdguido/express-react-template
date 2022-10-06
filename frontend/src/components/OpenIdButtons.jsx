@@ -1,55 +1,20 @@
+import axios from 'axios';
 import { FaGoogle, FaFacebook, FaGithub } from 'react-icons/fa';
 
-const { VITE_GOOGLE_CLIENT_ID, VITE_GITHUB_CLIENT_ID, VITE_FACEBOOK_CLIENT_ID, MODE, HOST } =
-    import.meta.env;
-const redirectURI = (service) => {
-    return MODE === 'production' ? `${HOST}/${service}` : `http://localhost:3000/${service}`;
-};
-
 function OpenIdButtons() {
-    const google = () => {
-        const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
-        const options = {
-            redirect_uri: redirectURI('google'),
-            client_id: VITE_GOOGLE_CLIENT_ID,
-            access_type: 'offline',
-            response_type: 'code',
-            prompt: 'consent',
-            scope: [
-                'https://www.googleapis.com/auth/userinfo.profile',
-                'https://www.googleapis.com/auth/userinfo.email'
-            ].join(' ')
-        };
-        const usp = new URLSearchParams(options);
-
-        window.location.href = `${rootUrl}?${usp.toString()}`;
+    const google = async () => {
+        const res = await axios.get('api/auth/google/url');
+        window.location.href = res.data;
     };
 
-    const github = () => {
-        const rootUrl = 'https://github.com/login/oauth/authorize';
-        const options = {
-            redirect_uri: redirectURI('github'),
-            client_id: VITE_GITHUB_CLIENT_ID,
-            scope: 'user'
-        };
-        const usp = new URLSearchParams(options);
-
-        window.location.href = `${rootUrl}?${usp.toString()}`;
+    const github = async () => {
+        const res = await axios.get('api/auth/github/url');
+        window.location.href = res.data;
     };
 
-    const facebook = () => {
-        const rootUrl = 'https://www.facebook.com/v15.0/dialog/oauth';
-        const options = {
-            redirect_uri: redirectURI('facebook'),
-            client_id: VITE_FACEBOOK_CLIENT_ID,
-            access_type: 'offline',
-            response_type: 'code',
-            prompt: 'consent',
-            scope: ['public_profile', 'email'].join(' ')
-        };
-        const usp = new URLSearchParams(options);
-
-        window.location.href = `${rootUrl}?${usp.toString()}`;
+    const facebook = async () => {
+        const res = await axios.get('api/auth/facebook/url');
+        window.location.href = res.data;
     };
 
     return (
