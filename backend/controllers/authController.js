@@ -4,16 +4,16 @@ const nodemailer = require('nodemailer');
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 
+const { NODE_ENV, HOST, GMAIL_USER, GMAIL_PASS } = process.env;
+const BASE_URL = NODE_ENV === 'production' ? HOST : 'http://localhost:5000';
+
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS
+        user: GMAIL_USER,
+        pass: GMAIL_PASS
     }
 });
-
-const { NODE_ENV, HOST } = process.env;
-const BASE_URL = NODE_ENV === 'production' ? `${HOST}` : 'http://localhost:5000';
 
 const generateJWT = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -47,7 +47,7 @@ const loginUser = asyncHandler(async (req, res) => {
             }
         );
         res.status(401);
-        throw new Error('Check your mail and verify account');
+        throw new Error('Check your mail to verify account');
     }
 
     if (user && (await bcrypt.compare(password, user.password))) {

@@ -17,14 +17,11 @@ function RegisterForm() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+    const { isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
     useEffect(() => {
         if (isError) {
             toast.error(message);
-        }
-        if (user || isSuccess) {
-            navigate('/login');
         }
         dispatch(reset());
     }, [isError, isSuccess, message, navigate, dispatch]);
