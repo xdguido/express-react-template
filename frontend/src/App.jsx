@@ -5,9 +5,9 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Recovery from './pages/Recovery';
-import FacebookOAuth from './pages/FacebookOauth';
-import GoogleOAuth from './pages/GoogleOauth';
-import GithubOAuth from './pages/GithubOauth';
+import FacebookOAuth from './pages/Facebook';
+import GoogleOAuth from './pages/Google';
+import GithubOAuth from './pages/Github';
 import NotFound from './pages/NotFound';
 import PageLayout from './pages/PageLayout';
 
