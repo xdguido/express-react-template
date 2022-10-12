@@ -110,6 +110,8 @@ _To get this project running in a development environment follow these steps._
 
 1. Register yourself with an email and password. Verify your account with the link the app send to your email. _Voila_, log in with your new account.
 2. Use Google, Github or Facebook whether to register or log in yourself.
+3. Build your app on top of this template.
+4. Protect your Express routes using the auth middleware provided.
 
 <!-- ROADMAP -->
 
