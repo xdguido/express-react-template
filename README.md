@@ -28,7 +28,7 @@
 
 [Live preview](https://oauth-template-app.herokuapp.com)
 
-Template built with Express and React to speed up build process of an auth-session based app.
+Template built with Express and React to speed up build process of an auth-session based app. It includes user authentication, API auth-protected routes, responsive UI and other features.
 
 ### Features:
 
@@ -125,7 +125,7 @@ _To get this project running in a development environment follow these steps._
 -   [ ] Multi-language Support
     -   [ ] Spanish
 
-See the [open issues](https://github.com/xdguido/express-react-template/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/xdguido/express-react-template/issues) for a full list of proposed features (and known issues) or post your own.
 
 <!-- CONTRIBUTING -->
 
