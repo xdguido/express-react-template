@@ -31,35 +31,21 @@ async function getTokens(code) {
 
     const usp = new URLSearchParams(values);
 
-    try {
-        const res = await axios.post(url, usp.toString(), {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
-        return res.data;
-    } catch (error) {
-        if (error.response) {
-            console.error(error.response.data);
+    const res = await axios.post(url, usp.toString(), {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
-        throw new Error(`Failed to get token: ${error.message}`);
-    }
+    });
+    return res.data;
 }
 
 async function fetchUser(accessToken) {
     // Fetch the user's profile with the access token and bearer
-    try {
-        const res = await axios.get(
-            `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email,picture`
-        );
+    const res = await axios.get(
+        `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email,picture`
+    );
 
-        return res.data;
-    } catch (error) {
-        if (error.response) {
-            console.error(error.response.data);
-        }
-        throw new Error(`Failed to fetch user: ${error.message}`);
-    }
+    return res.data;
 }
 
 const facebookService = { getFacebookAuthURL, getTokens, fetchUser };

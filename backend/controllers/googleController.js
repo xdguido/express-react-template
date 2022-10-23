@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
-const googleService = require('../lib/googleService');
+const googleService = require('../services/googleService');
 const User = require('../models/User');
+const ErrorException = require('../error/errorException');
+const ErrorCode = require('../error/errorCode');
 
 const generateJWT = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -19,8 +21,7 @@ const loginGoogle = asyncHandler(async (req, res) => {
     const data = await googleService.fetchUser(id_token, access_token);
 
     if (data && !data.verified_email) {
-        res.status(401);
-        throw new Error('User not verified');
+        throw new ErrorException(ErrorCode.UnverifiedAccount);
     }
 
     const userExists = await User.findOne({ email: data.email });
@@ -28,6 +29,7 @@ const loginGoogle = asyncHandler(async (req, res) => {
     if (userExists) {
         return res.status(201).json({
             token: generateJWT(userExists._id),
+            email: userExists.email,
             name: userExists.name,
             image_url: userExists.image_url
         });
@@ -43,13 +45,13 @@ const loginGoogle = asyncHandler(async (req, res) => {
     if (user) {
         return res.status(201).json({
             token: generateJWT(user._id),
+            email: user.email,
             name: user.name,
             image_url: user.image_url
         });
     }
 
-    res.status(500);
-    throw new Error('Error creating user');
+    throw new ErrorException(ErrorCode.AsyncError, 'Error creating user');
 });
 
 module.exports = { loginGoogle, urlGoogle };

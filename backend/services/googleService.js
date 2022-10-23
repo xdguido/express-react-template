@@ -34,40 +34,26 @@ async function getTokens(code) {
 
     const usp = new URLSearchParams(values);
 
-    try {
-        const res = await axios.post(url, usp.toString(), {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
-        return res.data;
-    } catch (error) {
-        if (error.response) {
-            console.error(error.response.data);
+    const res = await axios.post(url, usp.toString(), {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
-        throw new Error(`Failed to get token: ${error.message}`);
-    }
+    });
+    return res.data;
 }
 
 async function fetchUser(idToken, accessToken) {
     // Fetch the user's profile with the access token and bearer
-    try {
-        const res = await axios.get(
-            `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${accessToken}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${idToken}`
-                }
+    const res = await axios.get(
+        `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${accessToken}`,
+        {
+            headers: {
+                Authorization: `Bearer ${idToken}`
             }
-        );
-
-        return res.data;
-    } catch (error) {
-        if (error.response) {
-            console.error(error.response.data);
         }
-        throw new Error(`Failed to fetch user: ${error.message}`);
-    }
+    );
+
+    return res.data;
 }
 
 const googleService = { getGoogleAuthURL, getTokens, fetchUser };

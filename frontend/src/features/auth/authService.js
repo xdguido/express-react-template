@@ -15,9 +15,10 @@ const login = async (userData) => {
 
     if (res.data && res.status === 201) {
         localStorage.setItem('user', JSON.stringify(res.data));
+        return res.data;
+    } else {
+        throw new Error();
     }
-
-    return res.data;
 };
 
 // google login

@@ -27,45 +27,30 @@ async function getTokens(code) {
 
     const usp = new URLSearchParams(values);
 
-    try {
-        const res = await axios.post(url, usp.toString(), {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                Accept: 'application/json'
-            }
-        });
-        return res.data;
-    } catch (error) {
-        if (error.response) {
-            console.error(error.response.data);
+    const res = await axios.post(url, usp.toString(), {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Accept: 'application/json'
         }
-        throw new Error(`Failed to get token: ${error.message}`);
-    }
+    });
+    return res.data;
 }
 
 async function fetchUser(accessToken) {
     // Fetch the user's profile with the access token and bearer
-    try {
-        const res = await axios.get('https://api.github.com/user', {
-            headers: {
-                Authorization: `token ${accessToken}`
-            }
-        });
-        const res1 = await axios.get('https://api.github.com/user/emails', {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-
-        const res2 = { ...res.data, ...res1.data[0] };
-
-        return res2;
-    } catch (error) {
-        if (error.response) {
-            console.error(error.response.data);
+    const res = await axios.get('https://api.github.com/user', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
         }
-        throw new Error(`Failed to fetch user: ${error.message}`);
-    }
+    });
+    const res1 = await axios.get('https://api.github.com/user/emails', {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    });
+
+    const res2 = { ...res.data, ...res1.data[0] };
+    return res2;
 }
 
 const githubService = { getGithubAuthURL, getTokens, fetchUser };
