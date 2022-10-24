@@ -41,7 +41,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     if (user && (await user.verifyPassword(password))) {
-        return res.json({
+        return res.status(200).json({
             _id: user.id,
             name: user.name,
             email: user.email,
@@ -63,11 +63,11 @@ const registerUser = asyncHandler(async (req, res) => {
     const validName = isValidName(name);
 
     if (!name || !email || !password) {
-        throw new ErrorException(ErrorCode.InvalidCredentials);
+        throw new ErrorException(ErrorCode.InvalidCredentials, 'Missing credentials');
     }
 
     if (!validEmail || !validPassword || !validName) {
-        throw new ErrorException(ErrorCode.InvalidCredentials);
+        throw new ErrorException(ErrorCode.InvalidCredentials, 'Invalid email, password or name');
     }
 
     const userExists = await User.findOne({ email });
@@ -122,13 +122,13 @@ const sendRecovery = asyncHandler(async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-        throw new ErrorException(ErrorCode.InvalidCredentials);
+        throw new ErrorException(ErrorCode.InvalidCredentials, 'Missing email');
     }
 
     const validEmail = isValidEmail(email);
 
     if (!validEmail) {
-        throw new ErrorException(ErrorCode.InvalidCredentials);
+        throw new ErrorException(ErrorCode.InvalidCredentials, 'Invalid email');
     }
 
     const userExists = await User.findOne({ email });
@@ -161,16 +161,15 @@ const resetPassword = asyncHandler(async (req, res) => {
     const { password, token } = req.body;
 
     if (!password || !token) {
-        throw new ErrorException(ErrorCode.InvalidCredentials);
+        throw new ErrorException(ErrorCode.InvalidCredentials, 'Missing credentials');
     }
 
     const validPassword = isValidPassword(password);
-
-    if (!validPassword) {
-        throw new ErrorException(ErrorCode.InvalidCredentials);
-    }
-
     const decoded = jwt.verify(token, JWT_PASS_SECRET);
+
+    if (!validPassword || !decoded) {
+        throw new ErrorException(ErrorCode.InvalidCredentials, 'Invalid password or token');
+    }
 
     const user = await User.findOne({ _id: decoded.id });
     Object.assign(user, { password });
