@@ -13,7 +13,7 @@ const initialState = {
 };
 
 // register user
-export const register = createAsyncThunk('auth/register', async (user, thunkAPI) => {
+export const registerUser = createAsyncThunk('auth/register', async (user, thunkAPI) => {
     try {
         return await authService.register(user);
     } catch (err) {
@@ -23,7 +23,7 @@ export const register = createAsyncThunk('auth/register', async (user, thunkAPI)
 });
 
 // login user
-export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
+export const loginUser = createAsyncThunk('auth/login', async (user, thunkAPI) => {
     try {
         return await authService.login(user);
     } catch (err) {
@@ -105,7 +105,7 @@ export const authSlice = createSlice({
                 (state, action) => {
                     state.isLoading = false;
                     state.isSuccess = true;
-                    state.user = action.payload && action.payload.token ? action.payload : null;
+                    state.user = action.payload?.token ? action.payload : null;
                 }
             )
             .addMatcher(

@@ -17,7 +17,7 @@ function Register() {
                     <p>{"If you don't see the email check the spam inbox."}</p>
                 </div>
             ) : (
-                <div className="flex flex-col items-center max-w-xs">
+                <div className="flex flex-col items-center w-80">
                     <Logo />
                     <OpenIdButtons />
                     <RegisterForm />
