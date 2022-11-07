@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
 
-// get user from local storage
-const user = JSON.parse(localStorage.getItem('user'));
+// const persist = JSON.parse(localStorage.getItem('persist'));
 
 const initialState = {
-    user,
+    user: null,
+    persist: true,
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -30,11 +30,6 @@ export const loginUser = createAsyncThunk('auth/login', async (user, thunkAPI) =
         const message = err.response.data.name;
         return thunkAPI.rejectWithValue(message);
     }
-});
-
-// logout user
-export const logout = createAsyncThunk('auth/logout', async () => {
-    await authService.logout();
 });
 
 // reset password
@@ -81,11 +76,21 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        setUser: (state, action) => {
+            state.user = action.payload;
+        },
+        setPersist: (state, action) => {
+            state.persist = action.payload;
+        },
         reset: (state) => {
             state.isLoading = false;
             state.isError = false;
             state.isSuccess = false;
             state.message = '';
+        },
+        logout: (state) => {
+            state.user = null;
+            localStorage.removeItem('persist');
         }
     },
     extraReducers: (builder) => {
@@ -105,7 +110,7 @@ export const authSlice = createSlice({
                 (state, action) => {
                     state.isLoading = false;
                     state.isSuccess = true;
-                    state.user = action.payload?.token ? action.payload : null;
+                    state.user = action.payload?.accessToken ? action.payload : null;
                 }
             )
             .addMatcher(
@@ -122,5 +127,5 @@ export const authSlice = createSlice({
     }
 });
 
-export const { reset } = authSlice.actions;
+export const { reset, setUser, logout } = authSlice.actions;
 export default authSlice.reducer;

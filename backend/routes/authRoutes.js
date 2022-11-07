@@ -1,17 +1,33 @@
 const router = require('express').Router();
+const rateLimit = require('express-rate-limit');
 const {
     registerUser,
     loginUser,
     confirmEmail,
     sendRecovery,
-    resetPassword
+    resetPassword,
+    handleRefreshToken
 } = require('../controllers/authController');
 const { loginGoogle, urlGoogle } = require('../controllers/googleController');
 const { loginFacebook, urlFacebook } = require('../controllers/facebookController');
 const { loginGithub, urlGithub } = require('../controllers/githubController');
+const ErrorException = require('../error/errorException');
+const ErrorCode = require('../error/errorCode');
 
-router.post('/', registerUser);
-router.post('/login', loginUser);
+const apiLimiter = rateLimit({
+    windowsMs: 1000,
+    max: 5,
+    handler: () => {
+        throw new ErrorException(
+            ErrorCode.RequestLimit,
+            'Too many requests, please try again later'
+        );
+    }
+});
+
+router.post('/', apiLimiter, registerUser);
+router.post('/login', apiLimiter, loginUser);
+router.get('/refresh', handleRefreshToken);
 
 router.get('/confirmation/:token', confirmEmail);
 router.get('/recovery', sendRecovery);

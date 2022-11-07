@@ -4,30 +4,25 @@ const path = require('path');
 const dotenv = require('dotenv').config();
 // eslint-disable-next-line no-unused-vars
 const colors = require('colors');
-const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const corsOptions = require('./config/corsOptions');
+const { logger } = require('./middleware/logEvents');
 const { errorHandler } = require('./error/errorHandler');
-const ErrorException = require('./error/errorException');
-const ErrorCode = require('./error/errorCode');
+const credentials = require('./middleware/credentials');
 
 const { NODE_ENV } = process.env;
 
 const app = express();
 
-const apiLimiter = rateLimit({
-    windowsMs: 1000,
-    max: 5,
-    handler: () => {
-        throw new ErrorException(
-            ErrorCode.RequestLimit,
-            'Too many requests, please try again later'
-        );
-    }
-});
-
+app.use(logger);
+app.use(credentials);
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-app.use('/api/auth', apiLimiter, require('./routes/authRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
 
 // serve frontend
 if (NODE_ENV === 'production') {

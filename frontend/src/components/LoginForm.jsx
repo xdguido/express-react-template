@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { loginUser, reset } from '../features/auth/authSlice';
 import { validateEmail, validatePassword } from '../validators/userValidator';
@@ -21,7 +21,9 @@ function LoginForm() {
         }
     });
     const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useDispatch();
+    const from = location.state?.from?.pathname || '/';
     const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
     const inputs = [
@@ -51,8 +53,8 @@ function LoginForm() {
         if (isError) {
             toast.error(message);
         }
-        if (user || isSuccess) {
-            navigate('/');
+        if (user) {
+            navigate(from, { replace: true });
         }
         dispatch(reset());
     }, [user, isError, isSuccess, message, navigate, dispatch]);

@@ -6,8 +6,16 @@ const ErrorCode = require('../error/errorCode');
 const ErrorException = require('../error/errorException');
 const { isValidEmail, isValidName, isValidPassword } = require('../lib/userValidator');
 
-const { NODE_ENV, HOST, GMAIL_USER, GMAIL_PASS, JWT_EMAIL_SECRET, JWT_PASS_SECRET, JWT_SECRET } =
-    process.env;
+const {
+    NODE_ENV,
+    HOST,
+    GMAIL_USER,
+    GMAIL_PASS,
+    JWT_EMAIL_SECRET,
+    JWT_PASS_SECRET,
+    JWT_SECRET_ACCESS,
+    JWT_SECRET_REFRESH
+} = process.env;
 const BASE_URL = NODE_ENV === 'production' ? HOST : 'http://localhost:5000';
 
 const transporter = nodemailer.createTransport({
@@ -18,15 +26,39 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const generateJWT = (id) => {
-    return jwt.sign({ id }, JWT_SECRET, { expiresIn: '7d' });
+const generateJWT = (value, secret, time) => {
+    return jwt.sign({ id: value }, secret, { expiresIn: time });
 };
+
+// @desc Provide new Access Token
+// @route GET /api/auth/refresh
+// @access Private
+const handleRefreshToken = asyncHandler(async (req, res) => {
+    const { cookies } = req;
+    if (!cookies?.jwt) {
+        throw new ErrorException(ErrorCode.Unauthenticated);
+    }
+    const refreshToken = cookies.jwt;
+    const decoded = jwt.verify(refreshToken, JWT_SECRET_REFRESH);
+
+    const user = await User.findOne({ _id: decoded.id });
+    if (!user) {
+        throw new ErrorException(ErrorCode.Forbidden, 'Invalid cookie');
+    }
+
+    return res.json({
+        name: user.name,
+        email: user.email,
+        image_url: user.image_url,
+        accessToken: generateJWT(user.id, JWT_SECRET_ACCESS, '30s')
+    });
+});
 
 // @desc Login user
 // @route POST /api/auth/login
 // @access Public
 const loginUser = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, persist } = req.body;
     const validEmail = isValidEmail(email);
     const validPassword = isValidPassword(password);
 
@@ -41,13 +73,29 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     if (user && (await user.verifyPassword(password))) {
-        return res.status(200).json({
-            _id: user.id,
+        if (persist) {
+            res.cookie('jwt', generateJWT(user._id, JWT_SECRET_REFRESH, '30d'), {
+                httpOnly: true,
+                sameSite: 'None',
+                secure: true,
+                maxAge: 720 * 60 * 60 * 1000
+            });
+        } else {
+            res.cookie('jwt', generateJWT(user._id, JWT_SECRET_REFRESH, '1d'), {
+                httpOnly: true,
+                sameSite: 'None',
+                secure: true,
+                maxAge: 24 * 60 * 60 * 1000
+            });
+        }
+        res.status(200).json({
             name: user.name,
             email: user.email,
-            verified_email: user.verified_email,
-            token: generateJWT(user._id)
+            image_url: user.image_url,
+            persist: true,
+            accessToken: generateJWT(user.id, JWT_SECRET_ACCESS, '30s')
         });
+        return;
     }
 
     throw new ErrorException(ErrorCode.InvalidCredentials, 'Email not found');
@@ -83,7 +131,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
 
     if (user) {
-        const token = jwt.sign({ id: user._id }, JWT_EMAIL_SECRET, { expiresIn: '1d' });
+        const token = generateJWT(user._id, JWT_EMAIL_SECRET, '1d');
         const url = `${BASE_URL}/api/auth/confirmation/${token}`;
 
         transporter.sendMail({
@@ -134,9 +182,7 @@ const sendRecovery = asyncHandler(async (req, res) => {
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-        const token = jwt.sign({ id: userExists._id }, JWT_PASS_SECRET, {
-            expiresIn: '15m'
-        });
+        const token = generateJWT(userExists._id, JWT_PASS_SECRET, '15m');
 
         const url = `${BASE_URL}/recovery/${token}`;
 
@@ -155,7 +201,7 @@ const sendRecovery = asyncHandler(async (req, res) => {
 
 // @desc Resets password
 // @route PUT api/auth/reset-password
-// @access Public
+// @access Private
 
 const resetPassword = asyncHandler(async (req, res) => {
     const { password, token } = req.body;
@@ -187,5 +233,6 @@ module.exports = {
     loginUser,
     confirmEmail,
     resetPassword,
-    sendRecovery
+    sendRecovery,
+    handleRefreshToken
 };

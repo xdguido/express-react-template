@@ -21,7 +21,7 @@ describe('Login Endpoint //POST', () => {
         expect(res.statusCode).toBe(200);
         expect(res.body.name).toBe('John');
         expect(res.body.email).toBe('testing1@gmail.com');
-        expect(res.body.token).toBeTruthy();
+        expect(res.body.accessToken).toBeTruthy();
     });
     it('Should throw error 400 status', async () => {
         const res = await request.post('/api/auth/login').send({

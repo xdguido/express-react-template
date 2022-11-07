@@ -1,16 +1,7 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-function Home() {
-    const navigate = useNavigate();
+function Dashboard() {
     const { user } = useSelector((state) => state.auth);
-
-    useEffect(() => {
-        if (!user) {
-            navigate('/login');
-        }
-    }, [user, navigate]);
 
     return (
         <div className="flex items-center justify-center p-4">
@@ -21,4 +12,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default Dashboard;

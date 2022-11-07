@@ -24,6 +24,9 @@ class ErrorException extends Error {
             case ErrorCode.UnverifiedAccount:
                 this.status = 401;
                 break;
+            case ErrorCode.Forbidden:
+                this.status = 403;
+                break;
             case ErrorCode.NotFound:
                 this.status = 404;
                 break;

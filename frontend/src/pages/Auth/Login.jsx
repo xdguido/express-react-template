@@ -1,6 +1,6 @@
-import OpenIdButtons from '../components/OpenIdButtons';
-import LoginForm from '../components/LoginForm';
-import Logo from '../components/Logo';
+import OpenIdButtons from '../../components/OpenIdButtons';
+import LoginForm from '../../components/LoginForm';
+import Logo from '../../components/Logo';
 import { Link } from 'react-router-dom';
 
 function Login() {

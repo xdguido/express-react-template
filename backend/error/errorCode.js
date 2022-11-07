@@ -3,6 +3,8 @@ class ErrorCode {
 
     static Unauthenticated = 'Unauthenticated';
 
+    static Forbidden = 'Forbidden';
+
     static UnverifiedAccount = 'UnverifiedAccount';
 
     static InvalidCredentials = 'InvalidCredentials';

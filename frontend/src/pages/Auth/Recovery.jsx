@@ -1,5 +1,5 @@
-import RecoveryForm from '../components/RecoveryForm';
-import Logo from '../components/Logo';
+import RecoveryForm from '../../components/RecoveryForm';
+import Logo from '../../components/Logo';
 
 function Recovery() {
     return (

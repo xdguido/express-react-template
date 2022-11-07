@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import OpenIdButtons from '../components/OpenIdButtons';
-import RegisterForm from '../components/RegisterForm';
-import Logo from '../components/Logo';
+import OpenIdButtons from '../../components/OpenIdButtons';
+import RegisterForm from '../../components/RegisterForm';
+import Logo from '../../components/Logo';
 import { Link } from 'react-router-dom';
 
 function Register() {
