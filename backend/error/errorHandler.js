@@ -11,8 +11,7 @@ const errorHandler = (err, req, res, next) => {
         console.error('Unknown Error occured:', err);
         res.status(500).send({
             name: ErrorCode.UnknownError,
-            // stack: NODE_ENV === 'production' ? null : err.stack
-            stack: err.stack
+            stack: NODE_ENV === 'production' ? null : err.stack
         });
     }
 };
