@@ -9,10 +9,8 @@ const errorHandler = (err, req, res, next) => {
         res.status(err.status).send(err);
     } else {
         console.error('Unknown Error occured:', err);
-        const statusCode = res.statusCode || 500;
-        res.status(statusCode).send({
+        res.status(500).send({
             name: ErrorCode.UnknownError,
-            status: statusCode,
             stack: NODE_ENV === 'production' ? null : err.stack
         });
     }
