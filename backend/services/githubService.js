@@ -1,7 +1,8 @@
 const axios = require('axios');
 
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, NODE_ENV, HOST } = process.env;
-const redirectURI = NODE_ENV === 'production' ? `${HOST}/github` : 'http://localhost:3000/github';
+const redirectURI =
+    NODE_ENV === 'production' ? `${HOST}/oauth/github` : 'http://localhost:3000/oauth/github';
 
 function getGithubAuthURL() {
     const rootUrl = 'https://github.com/login/oauth/authorize';

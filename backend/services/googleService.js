@@ -1,7 +1,8 @@
 const axios = require('axios');
 
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NODE_ENV, HOST } = process.env;
-const redirectURI = NODE_ENV === 'production' ? `${HOST}/google` : 'http://localhost:3000/google';
+const redirectURI =
+    NODE_ENV === 'production' ? `${HOST}/oauth/google` : 'http://localhost:3000/oauth/google';
 
 function getGoogleAuthURL() {
     const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
