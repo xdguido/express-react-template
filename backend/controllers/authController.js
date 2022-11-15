@@ -58,7 +58,7 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
 // @route POST /api/auth/login
 // @access Public
 const loginUser = asyncHandler(async (req, res) => {
-    const { email, password, persist } = req.body;
+    const { email, password, remind } = req.body;
     const validEmail = isValidEmail(email);
     const validPassword = isValidPassword(password);
 
@@ -73,7 +73,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     if (user && (await user.verifyPassword(password))) {
-        if (persist) {
+        if (remind) {
             res.cookie('jwt', generateJWT(user._id, JWT_SECRET_REFRESH, '30d'), {
                 httpOnly: true,
                 sameSite: 'None',
@@ -92,8 +92,8 @@ const loginUser = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             image_url: user.image_url,
-            persist: true,
-            accessToken: generateJWT(user.id, JWT_SECRET_ACCESS, '30s')
+            accessToken: generateJWT(user.id, JWT_SECRET_ACCESS, '30s'),
+            remind
         });
         return;
     }

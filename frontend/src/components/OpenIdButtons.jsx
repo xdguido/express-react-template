@@ -31,7 +31,7 @@ function OpenIdButtons() {
                 onClick={github}
             >
                 <FaGithub className="mr-1.5" />
-                Log in with Github
+                Log in with GitHub
             </button>
             <button
                 className="flex items-center justify-center rounded bg-blue-800 text-white text-sm w-full mb-3 py-2"

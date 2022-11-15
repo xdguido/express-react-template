@@ -16,21 +16,16 @@ const urlFacebook = (req, res) => {
 };
 
 const loginFacebook = asyncHandler(async (req, res) => {
-    const { code, persist } = req.body;
+    const { code, remind } = req.body;
 
     // eslint-disable-next-line camelcase
     const { access_token } = await facebookService.getTokens(code);
     const data = await facebookService.fetchUser(access_token);
 
-    // if (data && !data.verified) {
-    //     res.status(401);
-    //     throw new Error('User not verified');
-    // }
-
     const userExists = await User.findOne({ email: data.email });
 
     if (userExists) {
-        if (persist) {
+        if (remind) {
             res.cookie('jwt', generateJWT(userExists._id, JWT_SECRET_REFRESH, '30d'), {
                 httpOnly: true,
                 sameSite: 'None',
@@ -50,7 +45,7 @@ const loginFacebook = asyncHandler(async (req, res) => {
             email: userExists.email,
             name: userExists.name,
             image_url: userExists.image_url,
-            persist: true
+            remind
         });
         return;
     }
@@ -63,7 +58,7 @@ const loginFacebook = asyncHandler(async (req, res) => {
     });
 
     if (user) {
-        if (persist) {
+        if (remind) {
             res.cookie('jwt', generateJWT(user._id, JWT_SECRET_REFRESH, '30d'), {
                 httpOnly: true,
                 sameSite: 'None',
@@ -83,7 +78,7 @@ const loginFacebook = asyncHandler(async (req, res) => {
             email: user.email,
             name: user.name,
             image_url: user.image_url,
-            persist: true
+            remind
         });
         return;
     }

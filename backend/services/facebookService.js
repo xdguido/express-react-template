@@ -2,7 +2,7 @@ const axios = require('axios');
 
 const { FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, NODE_ENV, HOST } = process.env;
 const redirectURI =
-    NODE_ENV === 'production' ? `${HOST}/facebook` : 'http://localhost:3000/facebook';
+    NODE_ENV === 'production' ? `${HOST}/oauth/facebook` : 'http://localhost:3000/oauth/facebook';
 
 function getFacebookAuthURL() {
     const rootUrl = 'https://www.facebook.com/v15.0/dialog/oauth';

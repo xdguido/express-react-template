@@ -15,7 +15,9 @@ const { NODE_ENV } = process.env;
 
 const app = express();
 
-app.use(logger);
+if (NODE_ENV === 'development') {
+    app.use(logger);
+}
 app.use(credentials);
 app.use(cors(corsOptions));
 app.use(express.json());

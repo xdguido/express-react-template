@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from './authService';
 
-// const persist = JSON.parse(localStorage.getItem('persist'));
+const persist = JSON.parse(localStorage.getItem('persist'));
 
 const initialState = {
     user: null,
-    persist: true,
+    persist,
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -79,9 +79,6 @@ export const authSlice = createSlice({
         setUser: (state, action) => {
             state.user = action.payload;
         },
-        setPersist: (state, action) => {
-            state.persist = action.payload;
-        },
         reset: (state) => {
             state.isLoading = false;
             state.isError = false;
@@ -127,5 +124,5 @@ export const authSlice = createSlice({
     }
 });
 
-export const { reset, setUser, logout } = authSlice.actions;
+export const { reset, setUser, setPersist, logout } = authSlice.actions;
 export default authSlice.reducer;

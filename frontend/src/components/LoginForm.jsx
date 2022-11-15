@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -24,7 +24,9 @@ function LoginForm() {
     const location = useLocation();
     const dispatch = useDispatch();
     const from = location.state?.from?.pathname || '/';
-    const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+    const { isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+
+    const [remind, setRemind] = useState(true);
 
     const inputs = [
         {
@@ -53,14 +55,23 @@ function LoginForm() {
         if (isError) {
             toast.error(message);
         }
-        if (user) {
+        if (isSuccess) {
             navigate(from, { replace: true });
         }
         dispatch(reset());
-    }, [user, isError, isSuccess, message, navigate, dispatch]);
+    }, [isError, isSuccess, message, navigate, dispatch]);
+
+    useEffect(() => {
+        localStorage.setItem('remind', remind);
+    }, [remind]);
 
     const onSubmit = (data) => {
-        dispatch(loginUser(data));
+        const userData = { ...data, remind };
+        dispatch(loginUser(userData));
+    };
+
+    const onChange = () => {
+        setRemind((prev) => !prev);
     };
 
     return (
@@ -77,6 +88,16 @@ function LoginForm() {
                     errors={errors[input.name]}
                 />
             ))}
+            <label className="mb-3 text-sm" htmlFor="remind">
+                <input
+                    className="mr-2"
+                    id="remind"
+                    type="checkbox"
+                    checked={remind}
+                    onChange={onChange}
+                />
+                Keep me logged in
+            </label>
             <SubmitButton isLoading={isLoading} label="Log in" />
         </form>
     );

@@ -16,20 +16,20 @@ const urlGithub = (req, res) => {
 };
 
 const loginGithub = asyncHandler(async (req, res) => {
-    const { code, persist } = req.body;
+    const { code, remind } = req.body;
 
     // eslint-disable-next-line camelcase
     const { access_token } = await githubService.getTokens(code);
     const data = await githubService.fetchUser(access_token);
 
-    if (data && !data.verified) {
+    if (!data?.verified) {
         throw new ErrorException(ErrorCode.UnverifiedAccount);
     }
 
     const userExists = await User.findOne({ email: data.email });
 
     if (userExists) {
-        if (persist) {
+        if (remind) {
             res.cookie('jwt', generateJWT(userExists._id, JWT_SECRET_REFRESH, '30d'), {
                 httpOnly: true,
                 sameSite: 'None',
@@ -44,13 +44,13 @@ const loginGithub = asyncHandler(async (req, res) => {
                 maxAge: 24 * 60 * 60 * 1000
             });
         }
-        res.status(201).json({
+        return res.status(201).json({
             accessToken: generateJWT(userExists._id, JWT_SECRET_ACCESS, '30s'),
             email: userExists.email,
             name: userExists.name,
-            image_url: userExists.image_url
+            image_url: userExists.image_url,
+            remind
         });
-        return;
     }
 
     const user = await User.create({
@@ -61,7 +61,7 @@ const loginGithub = asyncHandler(async (req, res) => {
     });
 
     if (user) {
-        if (persist) {
+        if (remind) {
             res.cookie('jwt', generateJWT(userExists._id, JWT_SECRET_REFRESH, '30d'), {
                 httpOnly: true,
                 sameSite: 'None',
@@ -76,14 +76,13 @@ const loginGithub = asyncHandler(async (req, res) => {
                 maxAge: 24 * 60 * 60 * 1000
             });
         }
-        res.status(201).json({
+        return res.status(201).json({
             accessToken: generateJWT(user._id, JWT_SECRET_ACCESS, '30s'),
             email: user.email,
             name: user.name,
             image_url: user.image_url,
-            persist: true
+            remind
         });
-        return;
     }
 
     throw new ErrorException(ErrorCode.AsyncError, 'Error creating user');

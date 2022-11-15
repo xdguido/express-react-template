@@ -16,20 +16,20 @@ const urlGoogle = (req, res) => {
 };
 
 const loginGoogle = asyncHandler(async (req, res) => {
-    const { code, persist } = req.body;
+    const { code, remind } = req.body;
 
     // eslint-disable-next-line camelcase
     const { id_token, access_token } = await googleService.getTokens(code);
     const data = await googleService.fetchUser(id_token, access_token);
 
-    if (data && !data.verified_email) {
+    if (!data?.verified_email) {
         throw new ErrorException(ErrorCode.UnverifiedAccount);
     }
 
     const userExists = await User.findOne({ email: data.email });
 
     if (userExists) {
-        if (persist) {
+        if (remind) {
             res.cookie('jwt', generateJWT(userExists._id, JWT_SECRET_REFRESH, '30d'), {
                 httpOnly: true,
                 sameSite: 'None',
@@ -48,7 +48,8 @@ const loginGoogle = asyncHandler(async (req, res) => {
             accessToken: generateJWT(userExists._id, JWT_SECRET_ACCESS, '30s'),
             email: userExists.email,
             name: userExists.name,
-            image_url: userExists.image_url
+            image_url: userExists.image_url,
+            remind
         });
     }
 
@@ -60,12 +61,27 @@ const loginGoogle = asyncHandler(async (req, res) => {
     });
 
     if (user) {
+        if (remind) {
+            res.cookie('jwt', generateJWT(userExists._id, JWT_SECRET_REFRESH, '30d'), {
+                httpOnly: true,
+                sameSite: 'None',
+                secure: true,
+                maxAge: 720 * 60 * 60 * 1000
+            });
+        } else {
+            res.cookie('jwt', generateJWT(userExists._id, JWT_SECRET_REFRESH, '1d'), {
+                httpOnly: true,
+                sameSite: 'None',
+                secure: true,
+                maxAge: 24 * 60 * 60 * 1000
+            });
+        }
         return res.status(201).json({
-            accessToken: generateJWT(user._id, JWT_SECRET_ACCESS, '30s'),
-            email: user.email,
-            name: user.name,
-            image_url: user.image_url,
-            persist: true
+            accessToken: generateJWT(userExists._id, JWT_SECRET_ACCESS, '30s'),
+            email: userExists.email,
+            name: userExists.name,
+            image_url: userExists.image_url,
+            remind
         });
     }
 

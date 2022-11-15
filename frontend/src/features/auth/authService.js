@@ -5,14 +5,19 @@ const API_URL = 'api/auth/';
 // register user
 const register = async (userData) => {
     const res = await axios.post(API_URL, userData);
-    return res.data;
+    if (res.status === 201) {
+        return res.data;
+    }
+    throw new Error();
 };
 
 // login user
 const login = async (userData) => {
     const res = await axios.post(API_URL + 'login', userData);
-
-    if (res.data && res.status === 200) {
+    if (res.data?.remind) {
+        localStorage.setItem('persist', res.data.remind);
+    }
+    if (res.status === 200) {
         return res.data;
     }
     throw new Error();
@@ -21,8 +26,10 @@ const login = async (userData) => {
 // google login
 const loginGoogle = async (code) => {
     const res = await axios.post(API_URL + 'google/callback', code);
-
-    if (res.data && res.status === 201) {
+    if (res.data?.remind) {
+        localStorage.setItem('persist', res.data.remind);
+    }
+    if (res.status === 201) {
         return res.data;
     }
     throw new Error();
@@ -31,8 +38,10 @@ const loginGoogle = async (code) => {
 // facebook login
 const loginFacebook = async (code) => {
     const res = await axios.post(API_URL + 'facebook/callback', code);
-
-    if (res.data && res.status === 201) {
+    if (res.data?.remind) {
+        localStorage.setItem('persist', res.data.remind);
+    }
+    if (res.status === 201) {
         return res.data;
     }
     throw new Error();
@@ -41,8 +50,10 @@ const loginFacebook = async (code) => {
 // github login
 const loginGithub = async (code) => {
     const res = await axios.post(API_URL + 'github/callback', code);
-
-    if (res.data && res.status === 201) {
+    if (res.data?.remind) {
+        localStorage.setItem('persist', res.data.remind);
+    }
+    if (res.status === 201) {
         return res.data;
     }
     throw new Error();
