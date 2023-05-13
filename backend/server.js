@@ -27,16 +27,16 @@ app.use(cookieParser());
 app.use('/api/auth', require('./routes/authRoutes'));
 
 // serve frontend
-if (NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../frontend/dist')));
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, '../', 'frontend', 'dist', 'index.html'));
-    });
-} else {
-    app.get('/', (req, res) => {
-        res.send('Please set to production environment');
-    });
-}
+// if (NODE_ENV === 'production') {
+//     app.use(express.static(path.join(__dirname, '../frontend/dist')));
+//     app.get('*', (req, res) => {
+//         res.sendFile(path.resolve(__dirname, '../', 'frontend', 'dist', 'index.html'));
+//     });
+// } else {
+//     app.get('/', (req, res) => {
+//         res.send('Please set to production environment');
+//     });
+// }
 
 app.use(errorHandler);
 
