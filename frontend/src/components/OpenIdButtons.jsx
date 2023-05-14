@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../api/axios';
 import { FaGoogle, FaFacebook, FaGithub } from 'react-icons/fa';
 
 function OpenIdButtons() {
